@@ -89,29 +89,10 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
     pub fn mint(tx: types::SignedData, tbs: types::TxMint) -> DispatchResult {
-        let from = Self::ensure_rsa_signed(&tx)?;
-        let amount = tbs.amount;
-        let pre_bal = RawBalance::get(from);
-        let new_bal = pre_bal.checked_add(amount).ok_or("overflow")?;
-        RawBalance::insert(from, new_bal);
-        Self::increment_nonce(from)?;
-        Self::deposit_event(Event::Minted(from, amount));
-
-        Ok(())
+        return Err("disabled");
     }
     pub fn vote(tx: types::SignedData, tbs: types::TxVote) -> DispatchResult {
-        let from = Self::ensure_rsa_signed(&tx)?;
-        let amount = tbs.amount;
-        let term = Self::term_number();
-        let pre_bal = CumulativeVotes::get(term as u32);
-        let new_bal = pre_bal.checked_add(amount).ok_or("overflow")?;
-        ensure!(new_bal <= MAX_VOTE_BALANCE_PER_TERM, "too large amount");
-
-        CumulativeVotes::insert(term, new_bal);
-        Self::increment_nonce(from)?;
-        Self::deposit_event(Event::Voted(from, amount));
-
-        Ok(())
+        return Err("disabled");
     }
     pub fn next_term(tx: types::SignedData, tbs: types::TxNextTerm) -> DispatchResult {
         let from = Self::ensure_rsa_signed(&tx)?;
@@ -155,7 +136,7 @@ impl<T: Trait> Module<T> {
         Accounts::insert(new_account_id, new_account);
         AccountEnumerator::insert(new_count, new_account_id);
         AccountCount::mutate(|t| *t += 1);
-
+        RawBalance::insert(new_account_id, 1000000);
         Self::deposit_event(Event::AccountAdd(new_account_id));
 
         Ok(())
