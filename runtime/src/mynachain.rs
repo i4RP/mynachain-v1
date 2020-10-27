@@ -89,10 +89,10 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
     pub fn mint(tx: types::SignedData, tbs: types::TxMint) -> DispatchResult {
-        return Err("disabled");
+        return Err(sp_runtime::DispatchError::Other("disabled"));
     }
     pub fn vote(tx: types::SignedData, tbs: types::TxVote) -> DispatchResult {
-        return Err("disabled");
+        return Err(sp_runtime::DispatchError::Other("disabled"));
     }
     pub fn next_term(tx: types::SignedData, tbs: types::TxNextTerm) -> DispatchResult {
         let from = Self::ensure_rsa_signed(&tx)?;
